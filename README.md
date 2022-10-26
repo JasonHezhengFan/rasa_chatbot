@@ -1,7 +1,7 @@
 # rasa_chatbot
 To activate chatbot:
 1. Make sure you have installed rasa.
-2. rasa --shell to activate bot.
+2. "rasa shell" to activate bot.
 
 ### Basic Files structure:
 Domain.yml: 
