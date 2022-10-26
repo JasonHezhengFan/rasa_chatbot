@@ -2,6 +2,8 @@
 To activate chatbot:
 1. Make sure you have installed rasa.
 2. "rasa shell" to activate bot.
+3. Type "/stop" to stop the bot.
+4. Use "rasa train" to retrain the bot after modifying yml files.
 
 ### Basic Files structure:
 Domain.yml: 
