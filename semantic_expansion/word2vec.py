@@ -1,6 +1,8 @@
 from typing import List
 import gensim.downloader
 import numpy as np
+import pickle
+import os
 
 
 def get_similarity(v1: np.ndarray, v2:np.ndarray):
@@ -21,12 +23,13 @@ def get_similarity(v1: np.ndarray, v2:np.ndarray):
 class Word2Vec():
     """word2vec embeddings."""
 
-    def __init__(self, matrix, index_to_key, key_to_index):
+    def __init__(self, embed, matrix, index_to_key, key_to_index):
+        self.embed = embed
         self.matrix = matrix
         self.index_to_key = index_to_key
         self.key_to_index = key_to_index
 
-    def most_similar_words(self, vector: np.ndarray, topk: int):
+    def most_similar_words(self, word: str, topk: int):
         '''
         Input:
         - vector: query vector
@@ -36,6 +39,7 @@ class Word2Vec():
         - None: print out the top k similar words and similarities
         '''
         # TODO: print out topk most similar words and their probabilities
+        vector = self.embed[word]
         vector = vector/np.linalg.norm(vector)
         score = np.matmul(self.matrix, vector)
         k_ind = np.argpartition(score, -topk)[-topk:]
@@ -47,8 +51,12 @@ class Word2Vec():
         pass
 
 if __name__ == "__main__":
+    cwd = os.getcwd()
     embed = gensim.downloader.load('glove-wiki-gigaword-300')
     matrix = embed.get_normed_vectors()
-    word2vec = Word2Vec(matrix, embed.index_to_key, embed.key_to_index)
-    word2expand = input("Word to expand\n")
-    word2vec.most_similar_words(embed[word2expand], 10)
+    word2vec = Word2Vec(embed, matrix, embed.index_to_key, embed.key_to_index)
+    with open(cwd+'/semantic_expansion/w2v.pkl', 'wb') as out:
+        pickle.dump(word2vec, out, pickle.HIGHEST_PROTOCOL)
+
+    # word2expand = input("Word to expand\n")
+    # word2vec.most_similar_words(word2expand, 10)
